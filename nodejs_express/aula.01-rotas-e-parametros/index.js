@@ -6,21 +6,45 @@ const app = express(); //criando uma instância do Express
 
 //Criando a rota principal
 app.get("/", (req, res) => {
-    res.send("<br> <center><h1> Bem Vindo! </h1></center> <br> <hr>")
-})
+  res.send("<br> <center><h1> Bem Vindo! </h1></center> <br> <hr>");
+});
 
 //rota Perfil com parâmetro nome
 // :nome parâmetro obrigatório
-app.get("/perfil/:nome", (req, res)=>{
+// :nome? parâmetro opcional
+app.get("/perfil/:nome?", (req, res) => {
   //coletando o nome, guardando na variável e adicionando a resposta
-  const nome = req.params.nome
-  res.send(`Seja bem-vindo! <h1>${nome}</h1>`)
-})
+  const nome = req.params.nome;
+  //verificando se o parametro nome existe
+  if (nome) {
+    //se nome = true
+    res.send(`Seja bem-vindo! <h1>${nome}</h1>`);
+  } else {
+    res.send(`<h2>Faça login para acessar seu perfil</h2>`);
+  }
+});
 
 //rota de vídeos
-app.get("/videos", (req, res)=>{
-  res.send("<h1>Página de Vídeos</h1>")
-})
+app.get("/videos:playlist?/video:?", (req, res) => {
+  const playlist = req.params.playlist
+  const video = req.params.playlist
+
+  //verificando se playlist = true e video = undefined
+  if(playlist && video == undefined){
+    res.send(`<h2>Você está na playlist de ${playlist}</h2>`)
+  }
+
+  //verificando se os dois são true
+  if(playlist && video){
+    res.send(`<h2>Você está na playlist de ${playlist} reproduzindo o vídeo ${video}`)
+  }
+
+  //se nenhum parâmetro for informado
+  else {
+    res.send("<h1>Página de Vídeos</h1>");
+  }
+
+});
 
 //Iniciando o servidor na porta 8080
 app.listen(8080, (error) => {
