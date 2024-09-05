@@ -8,9 +8,9 @@
 <body>
     <h1>Bem vindo a pagina de perfil</h1>
 
+    <p>O nome digitado é: </p>
     <!-- tags ejs chamando variavel que veio do index.js -->
     <%= nome %>
-
     <!-- Condição para ver se o produto não foi passado -->
     <% if (!nome) { %>
         <p>Nomes: <%= listaNomes %></p>
