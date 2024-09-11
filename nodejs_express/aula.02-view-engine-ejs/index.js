@@ -19,11 +19,20 @@ app.get("/", (req, res) => {
 });
 
 //rota de vídeos
-app.get("/videos/:videos?", (req,res) =>{
+/*app.get("/videos/:playlist?/:videos?", (req,res) =>{
   const listaVideos = ['Video1', 'Video2', 'Video3', 'Video4']
   const videos = req.params.videos
   res.render("videos", {videos:videos, listaVideos:listaVideos})
-})
+})*/
+
+app.get("/videos/:playlist?/:video?", (req, res) => {
+  const playlist = req.params.playlist;
+  const video = req.params.video;
+  res.render("videos", { 
+  playlist: playlist,
+  video:video
+ });
+});
 
 //rota de produtos, passando as variaveis para a pagina
 app.get("/produtos/:produto?", (req,res) => {
