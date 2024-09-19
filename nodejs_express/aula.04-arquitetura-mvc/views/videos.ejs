@@ -1,0 +1,16 @@
+<%- include ('partials/navbar.ejs') %>
+<%- include ('partials/header.ejs') %>
+
+    <h1>Bem vindo a pagina de videos</h1>
+
+    <% if(playlist && video == undefined) {%>
+        <p>Você está na playlist <%= playlist%></p>
+    <%}%>
+
+    <% if(playlist && video) {%>
+        <p>Você está na playlist <%= playlist%> vendo o vídeo <%= video%></p>
+    <%}%>
+    <!-- tags ejs chamando variavel que veio do index.js -->
+    
+
+<%- include ('partials/footer.ejs') %>
