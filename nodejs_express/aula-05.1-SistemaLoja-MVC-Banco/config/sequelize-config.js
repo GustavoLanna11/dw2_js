@@ -8,7 +8,7 @@ const connection = new Sequelize({
     username: 'root',
     password: '', 
     //inicie com essa linha comentada pois o banco não está criado 
-    //databse: 'loja',
+    database: 'loja',
     timezone: '-03:00'
 })
 
