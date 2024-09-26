@@ -1,0 +1,47 @@
+import express from 'express'
+const router = express.Router()
+//importando o model de cliente
+import Cliente from "../models/Cliente.js"
+
+// ROTA CLIENTES
+router.get("/clientes", function(req,res){
+    Cliente.findAll().then(clientes => {
+        res.render("clientes", {
+            clientes: clientes,
+        })
+    })
+})
+
+//Rota de cadastro de clientes
+router.post("/clientes/new", (req, res) => {
+    //recebendo dados do formulário e gravando nas variáveis
+    const nome = req.body.nome
+    const cpf = req.body.cpf
+    const endereco = req.body.endereco;
+    Cliente.create({
+        nome:nome,
+        cpf:cpf,
+        endereco:endereco,
+    }).then(() => {
+        res.redirect("/clientes");
+    })
+})
+
+//rota de exclusao de clientes
+//essa rota recebe o parâmetro id
+router.get("/clientes/delete/:id", (req, res) => {
+    //coletar o id que veio da url
+    const id = req.params.id
+    //metodo para excluir
+    Cliente.destroy({
+        where:{
+            id: id
+        }
+    }).then(() => {
+        res.redirect("/clientes")
+    }).catch(error => {
+        console.log(error)
+    })
+})
+
+export default router
