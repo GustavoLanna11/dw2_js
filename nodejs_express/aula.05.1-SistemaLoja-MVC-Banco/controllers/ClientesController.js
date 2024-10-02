@@ -42,6 +42,43 @@ router.get("/clientes/delete/:id", (req, res) => {
     }).catch(error => {
         console.log(error)
     })
-})
+});
+
+
+//Rota de edição de cliente
+router.get("/clientes/edit/:id", (req,res)=>{
+    const id = req.params.id
+    //memorize esse comando do sequelize
+    Cliente.findByPk(id).then((cliente) => {
+        res.render("clienteEdit", {
+            cliente:cliente,
+        });
+    }).catch((error) => {
+        console.log(error)
+    })
+});
+
+//rota de alteração de cliente
+//receb dados de um formulário? então é .post
+router.post("/clientes/update", (req, res) => {
+    const id = req.body.id
+    const nome = req.body.nome
+    const cpf = req.body.cpf
+    const endereco = req.body.endereco
+    Cliente.update(
+        {
+            //esquerda = banco 
+            //direita = formulario
+            nome:nome,
+            cpf:cpf,
+            endereco:endereco
+        },
+        {where: {id:id}}
+    ).then(()=>{
+        res.redirect("/clientes")
+    }).catch((error) => {
+        console.log(error)
+    })
+});
 
 export default router
