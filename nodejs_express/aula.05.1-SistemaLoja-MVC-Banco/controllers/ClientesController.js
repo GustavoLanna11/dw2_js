@@ -44,8 +44,6 @@ router.get("/clientes/delete/:id", (req, res) => {
     })
 });
 
-
-//Rota de edição de cliente
 router.get("/clientes/edit/:id", (req,res)=>{
     const id = req.params.id
     //memorize esse comando do sequelize
@@ -58,8 +56,6 @@ router.get("/clientes/edit/:id", (req,res)=>{
     })
 });
 
-//rota de alteração de cliente
-//receb dados de um formulário? então é .post
 router.post("/clientes/update", (req, res) => {
     const id = req.body.id
     const nome = req.body.nome

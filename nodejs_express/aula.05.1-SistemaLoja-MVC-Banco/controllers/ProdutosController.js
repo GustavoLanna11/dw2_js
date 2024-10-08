@@ -44,9 +44,9 @@ router.get("/produtos/delete/:id", (req, res) => {
     })
 });
 
-
-router.get("/produtos/edit/:id", (req,res)=> {
+router.get("/produtos/edit/:id", (req,res)=>{
     const id = req.params.id
+    //memorize esse comando do sequelize
     Produto.findByPk(id).then((produto) => {
         res.render("produtoEdit", {
             produto:produto,
@@ -63,12 +63,14 @@ router.post("/produtos/update", (req, res) => {
     const categoria = req.body.categoria
     Produto.update(
         {
+            //esquerda = banco 
+            //direita = formulario
             nome:nome,
             preco:preco,
             categoria:categoria
         },
         {where: {id:id}}
-    ).then(() => {
+    ).then(()=>{
         res.redirect("/produtos")
     }).catch((error) => {
         console.log(error)
