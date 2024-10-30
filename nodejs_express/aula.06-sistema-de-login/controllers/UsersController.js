@@ -4,11 +4,26 @@ import bcrypt from "bcrypt";
 const router = express.Router()
 
 router.get("/login", (req,res)=>{
-    res.render("login")
+    res.render("login", {
+        loggedOut: true, 
+        messages: req.flash()
+    })
+})
+
+//rota de logout
+router.get("/logout", (req,res)=>{
+    req.session.user = undefined;
+    res.redirect("/", {
+        loggedOut: true,
+        messages: req.flash()
+    })
 })
 
 router.get("/cadastro", (req,res)=>{
-    res.render("cadastro")
+    res.render("cadastro", {
+        loggedOut: true,
+        messages: req.flash()
+    })
 })
 
 router.post("/createUser", (req,res)=>{
@@ -32,7 +47,8 @@ router.post("/createUser", (req,res)=>{
             });
         } //caso esteja cadastrado
         else{
-            res.send(`Usuário já cadastrado! <br> <a href="/login">faça o login</a>`)
+            req.flash('danger', "Usuário cadastrado, faça o login!");
+            res.redirect("/cadastro")
         }
     })
 });
@@ -41,25 +57,31 @@ router.post("/createUser", (req,res)=>{
 router.post("/authenticate", (req,res)=>{
     const email = req.body.email;
     const password = req.body.password
-
     //buscar usuário no banco
     User.findOne({
         where:{
             email:email
         }
-    }).then(user=>{
+    }).then(user => {
         if(user != undefined){
             //valida a senha, verifica a hash
             const correct = bcrypt.compareSync(password, user.password)
             //se a senha for válida
             if(correct){
                 //autoriza login
-                res.redirect("/")
+                req.session.user={
+                    id: user.id,
+                    email: user.email
+                };
+                req.flash('success', "Login efetuado com sucesso!");
+               res.redirect("/")
             } else{
-                res.send(`Senha inválida! <br> <a href="/login">Tente novamente</a>`)
+                req.flash('danger', "A senha informada está incorreta! Tente novamente! ");
+                res.redirect("/login")
             }
         } else{
-            res.send(`Usuário não cadastrado! <br> <a href="/login">Tente novamente!</a>`)
+            req.flash('danger', "O usuário informado não existe! Tente novamente! ");
+            res.redirect("/login")
         }
     })
 })

@@ -11,6 +11,20 @@ import ClientesController from "./controllers/ClientesController.js"
 import ProdutosController from "./controllers/ProdutosController.js" 
 import PedidosController from "./controllers/PedidosController.js" 
 import UsersController from "./controllers/UsersController.js"
+import session from "express-session"
+//use "npm install express-session" para instalar o gerador de sessões e o importe
+import Auth from "./middleware/Auth.js"
+import flash from "express-flash"
+
+//configurando o express-session
+app.use(session({
+    secret: "lojasecret",
+    cookie: {maxAge:3600000},//sessão expira em uma hora
+    saveUninitialized: false,
+    resave: false
+}))
+
+app.use(flash())
 
 //Permitir capturar dados vindo de formulários
 app.use(express.urlencoded({extended: false}))
@@ -42,8 +56,10 @@ app.use("/", PedidosController)
 app.use("/", UsersController)
 
 // ROTA PRINCIPAL
-app.get("/",function(req,res){
-    res.render("index")
+app.get("/", Auth, function(req,res){
+    res.render("index", {
+        messages: req.flash()
+    })
 })
 
 // INICIA O SERVIDOR NA PORTA 8080
@@ -55,3 +71,4 @@ app.listen(8080,function(erro){
         console.log("Servidor iniciado com sucesso!")
     }
 })
+
