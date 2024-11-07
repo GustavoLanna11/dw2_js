@@ -1,18 +1,42 @@
 import express from 'express';
 import multer from 'multer';
+import connection from './config/sequelize-config.js';
+import Galeria from "./models/Galeria.js"
 const app = express()
 
 app.use(express.static('public'))
 app.set('view engine', 'ejs')
 
+//realizando a conexão com o banco de dados
+connection.authenticate().then(() => {
+    console.log("Conexão com o banco de dados feita com sucesso!");
+}).catch((error) => {
+    console.log(error)
+});
+
+//criando o banco de dados se ele não existir
+connection.query(`CREATE DATABASE IF NOT EXISTS galeria;`).then(() => {
+    console.log("O banco de dados está criado.");
+}).catch((error) => {
+    console.log(error)
+})
+
 const upload = multer({dest: "public/uploads/"})
 
 app.get("/", (req,res) => {
-    res.render("index")
+    Galeria.findAll().then(imagens=>{
+        res.render("index", {
+            imagens:imagens
+        })
+    })
 })
 
 //rota de upload
 app.post("/upload", upload.single("file"), (req, res)=>{
+    const file = req.file.filename
+    Galeria.create({
+        file:file,
+    })
     res.redirect("/");
 })
 

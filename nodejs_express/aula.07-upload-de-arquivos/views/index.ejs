@@ -14,9 +14,11 @@
             </div>
             <div class="card-body">
                 <div class="row">
+                    <% imagens.forEach(imagem => { %> 
                     <div class="col-md-3 m-auto">
-                        <img src="uploads/e0d8a61f8e0c85b50fd2000277402b55.png" class="img-thumbnail" alt="">
+                        <img src="/uploads/<%= imagem.file %>" class="img-thumbnail" alt="">
                     </div>
+                    <% }) %>
                 </div>
             </div>
 
